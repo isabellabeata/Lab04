@@ -76,7 +76,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnIscrivi" mnemonicParsing="false" onAction="#handleIscrivi" text="Iscrivi" translateX="450.0">
+                  <Button fx:id="btnIsIscritto" mnemonicParsing="false" onAction="#handleIscritto" text="Iscritto?" translateX="150.0">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnIscrivi" mnemonicParsing="false" onAction="#handleIscrivi" text="Iscrivi" translateX="380.0">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>

@@ -32,4 +32,19 @@ public class Model {
 	public List<Studente> getStudentiByCorso(Corso corso){
 		return this.corsoDAO.getStudentiIscrittiAlCorso(corso);
 	}
+	
+	public List<Corso> getCorsiStudente(int matricola){
+		return this.studenteDAO.getCorsiStudente(matricola);
+	}
+	
+	public boolean isIscrittoAlCorso(int matricola, Corso corso) {
+		List<Corso> list= this.getCorsiStudente(matricola);
+		if(list.contains(corso))
+			return true;
+		else return false;
+	}
+	
+	public boolean iscrivi(Studente studente, Corso corso) {
+		return this.corsoDAO.iscriviStudenteACorso(studente, corso);
+	}
 }

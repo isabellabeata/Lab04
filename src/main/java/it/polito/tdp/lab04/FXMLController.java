@@ -30,6 +30,9 @@ public class FXMLController {
 
     @FXML // fx:id="btnCercaCorsi"
     private Button btnCercaCorsi; // Value injected by FXMLLoader
+    
+    @FXML // fx:id="btnIsIscritto"
+    private Button btnIsIscritto; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnIscritti"
     private Button btnIscritti; // Value injected by FXMLLoader
@@ -73,14 +76,39 @@ public class FXMLController {
 
     @FXML
     void handleCercaCorsi(ActionEvent event) {
+    	String s= this.txtMatricola.getText();
+    	Integer i= Integer.parseInt(s);
+    	List<Corso> lista= model.getCorsiStudente(i);
+    	for(Corso ci: lista) {
+    		this.txtResult.appendText(ci+"\n");
+    	}
     	
     
     	
 
     }
+    @FXML
+    void handleIscritto(ActionEvent event) {
+    	String s= this.txtMatricola.getText();
+    	Integer i= Integer.parseInt(s);
+    	Corso c= this.cmbCorso.getValue();
+    	if(model.isIscrittoAlCorso(i, c)) {
+    		
+    		this.txtResult.setText("Lo studente è iscritto al corso");
+    	}else this.txtResult.setText("Lo studente NON è iscritto al corso");
+    	
+    	
+    }
 
     @FXML
     void handleIscrivi(ActionEvent event) {
+    	String s= this.txtMatricola.getText();
+    	Integer i= Integer.parseInt(s);
+    	Studente stud= model.getStudenteByMatricola(i);
+    	Corso cor=this.cmbCorso.getValue();
+    	if(model.iscrivi(stud, cor)) {
+    		this.txtResult.setText("Studente iscritto correttamente!");
+    	}else this.txtResult.setText("Fare controlli");
 
     }
 
@@ -113,6 +141,7 @@ public class FXMLController {
         assert btnIscrivi != null : "fx:id=\"btnIscrivi\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnOK != null : "fx:id=\"btnOK\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert btnIsIscritto != null : "fx:id=\"btnIsIscritto\" was not injected: check your FXML file 'Scene.fxml'.";
         assert cmbCorso != null : "fx:id=\"cmbCorso\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtCognome != null : "fx:id=\"txtCognome\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtMatricola != null : "fx:id=\"txtMatricola\" was not injected: check your FXML file 'Scene.fxml'.";
@@ -126,6 +155,7 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model=model;
+    	this.cmbCorso.getItems().add(null);
        for(Corso ci: model.getTuttiICorsi()) {
     	   this.cmbCorso.getItems().add(ci);
        }

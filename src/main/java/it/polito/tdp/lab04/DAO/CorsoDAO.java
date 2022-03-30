@@ -10,6 +10,7 @@ import java.util.List;
 import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Studente;
 
+
 public class CorsoDAO {
 	
 	/*
@@ -134,10 +135,31 @@ public class CorsoDAO {
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
 	 */
-	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
-		// TODO
-		// ritorna true se l'iscrizione e' avvenuta con successo
-		return false;
+	public boolean iscriviStudenteACorso(Studente studente, Corso corso) {
+		try {
+			Connection conn= ConnectDB.getConnection();
+
+			String sql= "INSERT INTO iscrizione (matricola, codins) VALUES (?, ?)";
+			PreparedStatement st= conn.prepareStatement(sql);
+
+			st.setInt(1, studente.getMatricola());
+			st.setString(2, corso.getCodins());
+
+			st.executeUpdate();
+			st.close();
+
+			conn.close();
+			return true;
+		} catch (SQLException e) {
+			System.out.print(e);
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
+
+
+	
+	
 
 }
