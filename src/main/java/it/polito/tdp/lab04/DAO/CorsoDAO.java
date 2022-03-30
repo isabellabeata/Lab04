@@ -38,6 +38,8 @@ public class CorsoDAO {
 
 				// Crea un nuovo JAVA Bean Corso
 				// Aggiungi il nuovo oggetto Corso alla lista corsi
+				
+				corsi.add(new Corso(codins, numeroCrediti, nome, periodoDidattico));
 			}
 
 			conn.close();
@@ -55,16 +57,79 @@ public class CorsoDAO {
 	/*
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
-	public void getCorso(Corso corso) {
-		// TODO
+	public Corso getCorso(String codins) {
+		
+
+		String sql = "SELECT * "
+				+ "FROM corso c "
+				+ "WHERE c.codins=?";
+
+		Corso c=null ;
+
+			try {
+				Connection conn = ConnectDB.getConnection();
+				PreparedStatement st = conn.prepareStatement(sql);
+				st.setString(1, codins);
+				ResultSet rs = st.executeQuery();
+
+				while (rs.next()) {
+
+					
+					int numeroCrediti = rs.getInt("crediti");
+					String nome = rs.getString("nome");
+					int periodoDidattico = rs.getInt("pd");
+					
+					c=new Corso(codins, numeroCrediti, nome, periodoDidattico);
+				}
+
+				conn.close();
+				
+				return c;
+				
+
+			} catch (SQLException e) {
+				// e.printStackTrace();
+				throw new RuntimeException("Errore Db", e);
+			}
+		
 	}
 
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public void getStudentiIscrittiAlCorso(Corso corso) {
-		// TODO
+	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
+		
+
+		String sql = "SELECT s.matricola, s.nome, s.cognome, s.CDS "
+				+ "FROM studente s, iscrizione i "
+				+ "WHERE i.matricola=s.matricola AND i.codins=? "
+				+ "GROUP BY s.matricola, s.nome, s.cognome, s.CDS";
+
+		List<Studente> studenti = new LinkedList<Studente>();
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			String s= corso.getCodins();
+			st.setString(1, s);
+			ResultSet rs = st.executeQuery();
+			
+			while (rs.next()) {
+				studenti.add(new Studente(rs.getInt("matricola"), rs.getString("cognome"), rs.getString("nome"), rs.getString("CDS")));
+			}
+
+			conn.close();
+			
+			return studenti;
+			
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db", e);
+		}
 	}
+		
+
 
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
